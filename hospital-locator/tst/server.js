@@ -4,9 +4,7 @@ var morgan = require('morgan')
 
 var getDistance = require('./mapRequest')
 var tstLocation = require('./tstLocation')
-
-
-
+const { tstGeoDdb } = require('./tstGeoDdb')
 
 var app = express()
 var port = 3001
@@ -18,11 +16,15 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/testLocation', (req,res) => {
-  tstLocation()
+app.get('/tstGeoDdb', (req,res) =>{
+  tstGeoDdb()
+  res.send('tstGeoDdb test cases')
 })
 
-
+app.get('/tstLocation', (req,res) => {
+  tstLocation()
+  console.send('location test cases')
+})
 
 app.get('/maps/:origin/:destination', (req, res) => {
     getDistance(req.params.origin, req.params.destination)

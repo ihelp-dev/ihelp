@@ -69,5 +69,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
->
-
+### Testing: 
+    cd into /tst directory and run nodemon server.js
+    If need to install test dependencies use: npm install --save-test <package>
+    Create service file name if does not exist appended with "tst" eg. "tstLocation.js"
+    Add endpoint for the test in server.js
+    Test cases should be in its own Service file and not in server.js
