@@ -26,7 +26,7 @@ AWS.config.update({
     region: REGION,
 })
 const ddb = new AWS.DynamoDB({
-    //endpoint: new AWS.Endpoint(DDB_HOST)  //Uncomment if testing on local, this will create testing table in aws account
+    //endpoint: new AWS.Endpoint(DDB_HOST)  //Uncomment if testing in local and don't want to create table in aws account
 })
 const config = new ddbGeo.GeoDataManagerConfiguration(ddb, TstTableName);
 config.longitudeFirst = true;
