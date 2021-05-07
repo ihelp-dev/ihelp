@@ -20,14 +20,16 @@ const getNearByHospitalsFromLocation = (coordinates) => {
 
 const SaveBussinessInfo = () => {};
 
+
 function startTest() {
-  coordinates = `28.704060,77.102493`;
-  getNearByHospitalsFromLocation(coordinates);
+  coordinates = `28.704060, 77.102493`
+  getNearByHospitalsFromLocation(coordinates)
 }
+
 
 async function tstLocation() {
-  console.log("Testing location apis");
-  await startTest();
+  console.log("Testing location apis")
+  await startTest()
 }
 
-module.exports = tstLocation;
+module.exports = tstLocation
