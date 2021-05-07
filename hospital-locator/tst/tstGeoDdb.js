@@ -3,11 +3,10 @@ const ddbGeo = require('dynamodb-geo');
 const REGION = "us-west-2";
 var cryptoJs = require('crypto-js')
 
-
 const akk = "AKIA3JLM5U5LID3ZBTOD"
 const skk = "6WW1h1174KOFJeqdcgSZ1USJUsdIbro3yC7BNUTO"
 const DDB_HOST = 'http://localhost:3005';
-const TstTableName = "TST_LOCATION_TBL_3"
+const TstTableName = "TST_INDIA_LOCATION_TBL_1"
 
 /*Prod
 AWS.config.update({
@@ -43,6 +42,8 @@ async function TableExists(tableName) {
                 resolve(true)
             }
        })
+   }).catch(err => {
+       console.log("Describe table failed: ", err)
    })
  
 }
@@ -81,19 +82,19 @@ async function InsertIntoTable(req) {
             Item: { // The primary key, geohash and geojson data is filled in for you
                 name_english: { S: 'TST_HOSPITAL_AAA' }, // Specify attribute values using { type: value } objects, like the DynamoDB API.
                 name_hindi: { S: '' },
-                total_beds: { S: '100' },
-                available_beds: { S: '10' },
-                isolation_beds: { S: '90' },
+                total_beds: { N: '100' },
+                available_beds: { N: '10' },
+                isolation_beds: { N: '90' },
                 oxygen_supported: { S: 'yes' },
                 reserved_icu_hdu: { S: '0' },
                 access: { S: 'free' },
                 street_address: { S: 'xyz street' },
                 city: { S: 'fremont' },
-                zip: { S: '94538' },
+                zip: { N: '94538' },
                 country: { S: 'India' },
                 url: { S: 'covid.com' },
                 point_of_interest: { S: 'hospital' },
-                operational: { S: 'true' },
+                operational: { S: 'true' }, 
             },
             // ... Anything else to pass through to `putItem`, eg ConditionExpression
         }
@@ -201,7 +202,7 @@ async function ListItems(tableName) {
 async function startTest() {
     if (!(await TableExists(TstTableName))) {
         console.log('Table doesnt exist creating new table')
-        CreateTable()
+        await CreateTable()
     } else {
         console.log('Table already exist')
     }
@@ -256,7 +257,7 @@ async function startTest() {
     await QueryWithinRadius(queryReq) //Should result success
     
     //Clean Table
-    await DeleteTable(TstTableName)
+    //await DeleteTableDONOTUNCOMMENT(TstTableName)
 
     //TODOS: implement batchWritePoints
 }
