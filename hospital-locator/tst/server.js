@@ -7,7 +7,7 @@ var tstLocation = require('./tstLocation')
 const { tstGeoDdb } = require('./tstGeoDdb')
 
 var app = express()
-var port = 3001
+var port = process.env.TST_PORT || 3001
 
 app.use(cors())
 app.use(morgan('combined'))
