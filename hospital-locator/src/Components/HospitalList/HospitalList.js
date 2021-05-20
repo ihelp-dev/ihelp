@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./HospitalList.css";
 import { FaBed, FaPhone, FaChevronRight } from "react-icons/fa";
 import { RiPinDistanceLine } from "react-icons/ri";
-import straightDistanceInKm from "../utils/getDistance";
+import straightDistanceInKm from "../../utils/getDistance";
 
 const HospitalList = ({
   hospitals,

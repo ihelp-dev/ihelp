@@ -2,7 +2,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import "./HomePage.css";
 import "../SearchBar/SearchBar";
 import { HospitalList } from "../HospitalList/HospitalList";
-import testData from "../__mocks__/testData.json";
+import testData from "../../__mocks__/testData.json";
 import { getNearByHospitalsFromLocation } from "../Location/Location";
 
 function HomePage({ gpsUserLocation, chosenUserCity, updateChosenUserCity }) {
