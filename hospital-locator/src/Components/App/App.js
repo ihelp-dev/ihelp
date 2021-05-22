@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import { Helmet } from "react-helmet";
 // import HomePage from "../HomePage/HomePage";
 // import HospitalFullInfo from "../HospitalFullInfo/HospitalFullInfo";
-// import "./App.css";
+import "./App.css";
 // import { Header } from "../Header/Header";
 import Navbar from "../Navbar/Navbar";
 import { CssBaseline, Paper } from "@material-ui/core";
@@ -11,6 +11,9 @@ import { ThemeProvider} from '@material-ui/core/styles';
 import { theme } from "../mui_theme";
 import Search from "../Search/Search";
 import SearchList from "../Search/SearchList";
+import Map from "../Map/Map";
+import ViewHeader from "../Map/ViewHeader";
+import data from "../../__mocks__/testData.json";
 // import Amplify, { API, graphqlOperation } from "aws-amplify";
 // import awsconfig from "./aws-exports";
 
@@ -25,15 +28,38 @@ function App() {
   //     console.log(theme);
   // }
 
+  const [eventData, setEventData] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [viewType, setViewType] = useState("desktop")
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setLoading(true)
+      // const res = await fetch('https://eonet.sci.gsfc.nasa.gov/api/v2.1/events')
+      // const { events } = await res.json()
+
+      setEventData(data)
+      setLoading(false)
+    }
+
+    fetchEvents()
+  }, [])
+
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline/>
-      <Paper>
-          <Navbar title="iHelp"/>
-          <Search />
-          <SearchList />
-      </Paper>
-    </ThemeProvider>
+    <div>
+      <ViewHeader viewType={viewType} setViewType={setViewType} />
+      { viewType == "desktop" ?
+        !loading ? <Map eventData={data} /> : <div>LOADING</div> :
+        <ThemeProvider theme={theme}>
+          <CssBaseline/>
+          <Paper>
+              <Navbar title="iHelp"/>
+              <Search />
+              <SearchList />
+          </Paper>
+        </ThemeProvider>
+      }
+    </div>
   );
 }
 
