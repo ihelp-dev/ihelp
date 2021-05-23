@@ -49,7 +49,16 @@ function App() {
     <div>
       <ViewHeader viewType={viewType} setViewType={setViewType} />
       { viewType == "desktop" ?
-        !loading ? <Map eventData={data} /> : <div>LOADING</div> :
+        !loading ? 
+          <Map 
+            eventData={data} 
+            center={{
+              lat: 20.5937,
+              lng: 78.9629
+            }}
+            zoom={5.5}
+          /> : 
+          <div>LOADING</div> :
         <ThemeProvider theme={theme}>
           <CssBaseline/>
           <Paper>

@@ -5,7 +5,8 @@
 }
 
 .header {
-    height: 2.5vh;
+    display: flex;
+    justify-content: space-between;
     padding: 10px;
     background-color: firebrick;
     color: #fff;
@@ -47,4 +48,15 @@
 
 .location-info li {
     padding: 5px 0;
+}
+
+.reset-map-button {
+    position: absolute;
+    bottom: 200px;
+    right: 200px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #fff;
 }

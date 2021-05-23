@@ -3,9 +3,12 @@ import GoogleMapReact from 'google-map-react'
 import './Map.css';
 import LocationMarker from './LocationMarker'
 import LocationInfoBox from './LocationInfoBox'
+import ResetMapButton from './ResetMapButton'
 
 const Map = ({ eventData, center, zoom }) => {
     const [locationInfo, setLocationInfo] = useState(null)
+    const [mapCenter, setMapCenter] = useState(center)
+    const [mapZoom, setMapZoom] = useState(zoom)
 
     const markers = eventData.map((ev, index) => {
         return (
@@ -16,6 +19,8 @@ const Map = ({ eventData, center, zoom }) => {
                 name={ev.properties.name_english}
                 address={ev.properties.street_address}
                 setLocationInfo={setLocationInfo}
+                setMapCenter={setMapCenter} 
+                setMapZoom={setMapZoom}
             />
         )
     })
@@ -23,24 +28,23 @@ const Map = ({ eventData, center, zoom }) => {
     return (
         <div className="map">
             <GoogleMapReact
-                bootstrapURLKeys={{ key: '' }}
+                bootstrapURLKeys={{ key: 'AIzaSyBpQKVwRFWxV3WTVsKwQv7GRCocyK6Ui9E' }}
                 defaultCenter={ center }
                 defaultZoom={ zoom }
+                center={ mapCenter }
+                zoom={ mapZoom }
                 onClick={() => setLocationInfo(null)}
             >
                 {markers}
             </GoogleMapReact>
             {locationInfo && <LocationInfoBox info={locationInfo} />}
+            {locationInfo && <ResetMapButton onClick={() => {
+                setMapCenter(center)
+                setMapZoom(zoom)
+                setLocationInfo(null)
+            }} />}
         </div>
     )
-}
-
-Map.defaultProps = {
-    center: {
-        lat: 20.5937,
-        lng: 78.9629
-    },
-    zoom: 5.5
 }
 
 export default Map
