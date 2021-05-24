@@ -16,6 +16,7 @@ ENV REACT_APP_GOOGLE_API_KEY $REACT_APP_GOOGLE_API_KEY
 # Copy required packages to image, node_modules should be included in .gitignore
 COPY hospital-locator .
 RUN npm install
+RUN npm update --force
 RUN echo "Application port mapped to $NODE_PORT"
 # If you are building your code for production
 # RUN npm ci --only=production
