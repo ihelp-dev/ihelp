@@ -96,6 +96,8 @@ Resources:
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 6
       HealthyThresholdCount: 2
+      Matcher:
+        HttpCode: 200-499
       TargetType: ip
       Name: !Sub ${AppName}-${Environment}-tr-grp
       Port: !Ref ContainerPort
