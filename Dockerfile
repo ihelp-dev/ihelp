@@ -12,6 +12,7 @@ WORKDIR /usr/src/app
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 ENV NODE_PORT $NODE_PORT
+ENV REACT_APP_GOOGLE_API_KEY $REACT_APP_GOOGLE_API_KEY
 # Copy required packages to image, node_modules should be included in .gitignore
 COPY hospital-locator .
 RUN npm install

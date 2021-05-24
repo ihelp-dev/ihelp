@@ -20,6 +20,8 @@ phases:
       - echo Building for application ${APP_NAME}
       - ENV=${ENV}
       - echo Application Environment ${ENV}
+      - REACT_APP_GOOGLE_API_KEY=${REACT_APP_GOOGLE_API_KEY}
+      - echo using google api key ${REACT_APP_GOOGLE_API_KEY}
       - echo node image uri ${NODE_URI}
       - CONTAINER_NAME=${APP_NAME}-${ENV}-container-def
       - echo Using container path ${CONTAINER_NAME}
