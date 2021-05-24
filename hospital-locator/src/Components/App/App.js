@@ -58,7 +58,6 @@ function App() {
         {/* All other routes will be defined here */}
         <Route path="/">
           <div>
-            <Health />
             <ViewHeader viewType={viewType} setViewType={setViewType} />
             {viewType == "desktop" ?
               !loading ?
