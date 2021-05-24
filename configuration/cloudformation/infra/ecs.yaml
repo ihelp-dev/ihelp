@@ -120,8 +120,10 @@ Resources:
         - Name: !Sub ${AppName}-${Environment}-container-def
           Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${AppName}-${Environment}
           Environment:
-            - Name: NODE_PORT
+            - Name: PORT
               Value: !Ref ContainerPort
+            - Name: REACT_APP_GOOGLE_API_KEY
+              Value: AIzaSyC6i8pdSDPQ92sZbkZsdRPbUOvW9D8Kd_A
           Essential: true
           PortMappings:
             - ContainerPort: !Ref ContainerPort

@@ -123,7 +123,7 @@ Resources:
           - Name: AWS_ACCOUNT_ID
             Type: PLAINTEXT
             Value: !Sub ${AWS::AccountId}
-          - Name: NODE_PORT
+          - Name: PORT
             Type: PLAINTEXT
             Value: !Sub ${ContainerPort} ##Port to be exposed (ie port at which node server is running)
           - Name: APP_NAME

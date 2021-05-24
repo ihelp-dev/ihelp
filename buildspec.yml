@@ -10,8 +10,8 @@ phases:
       - aws --version
       - node --version
       - docker --version
-      - echo node port
-      - NODE_PORT=$NODE_PORT
+      - PORT=$PORT
+      - echo server port $PORT
       - echo image uri ${IMAGE_URI}
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
