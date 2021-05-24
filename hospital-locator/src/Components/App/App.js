@@ -14,8 +14,7 @@ import SearchList from "../Search/SearchList";
 import Map from "../Map/Map";
 import ViewHeader from "../Map/ViewHeader";
 import data from "../../__mocks__/testData.json";
-import Health from "../HealthCheck/Health";
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import {Switch, Route } from 'react-router-dom';
 // import Amplify, { API, graphqlOperation } from "aws-amplify";
 // import awsconfig from "./aws-exports";
 
@@ -48,10 +47,10 @@ function App() {
   }, [])
 
   return (
-    <BrowserRouter>
+    
       <Switch>
         {/* This endpoint will just return you to a dummy HTML with a simple heading tag */}
-        <Route path="/health">
+        <Route path="/health"  status={200}>
           <h3>Hey There!!! The App is Healthy</h3>
         </Route>
 
@@ -84,7 +83,6 @@ function App() {
         {/* Finally you will be redirected to a not found page */}
 
       </Switch>
-    </BrowserRouter>
 
   );
 }
