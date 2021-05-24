@@ -21,4 +21,4 @@ RUN echo "Application port mapped to $NODE_PORT"
 
 EXPOSE $NODE_PORT
 
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]
