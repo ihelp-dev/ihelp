@@ -11,15 +11,12 @@ Parameters:
   GitHubRepoOwner:
     Type: String
     Description: GitHub User
-    Default: "ihelp-dev"
   GitHubRepoName:
     Type: String
     Description: GitHub Repo to pull from. Only the Name. not the URL
-    Default: "ihelp"
   GitHubBranch:
     Type: String
     Description: GitHub Branch
-    Default: "main"
   GitHubToken:
     NoEcho: true
     Type: String
