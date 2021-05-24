@@ -90,7 +90,7 @@ Resources:
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckEnabled: false
+      HealthCheckEnabled: true
       HealthCheckIntervalSeconds: 6
       HealthCheckPath: /health
       HealthCheckProtocol: HTTP

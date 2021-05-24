@@ -7,13 +7,15 @@ import "./App.css";
 // import { Header } from "../Header/Header";
 import Navbar from "../Navbar/Navbar";
 import { CssBaseline, Paper } from "@material-ui/core";
-import { ThemeProvider} from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { theme } from "../mui_theme";
 import Search from "../Search/Search";
 import SearchList from "../Search/SearchList";
 import Map from "../Map/Map";
 import ViewHeader from "../Map/ViewHeader";
 import data from "../../__mocks__/testData.json";
+import Health from "../HealthCheck/Health";
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 // import Amplify, { API, graphqlOperation } from "aws-amplify";
 // import awsconfig from "./aws-exports";
 
@@ -46,29 +48,45 @@ function App() {
   }, [])
 
   return (
-    <div>
-      <ViewHeader viewType={viewType} setViewType={setViewType} />
-      { viewType == "desktop" ?
-        !loading ? 
-          <Map 
-            eventData={data} 
-            center={{
-              lat: 20.5937,
-              lng: 78.9629
-            }}
-            zoom={5.5}
-          /> : 
-          <div>LOADING</div> :
-        <ThemeProvider theme={theme}>
-          <CssBaseline/>
-          <Paper>
-              <Navbar title="iHelp"/>
-              <Search />
-              <SearchList />
-          </Paper>
-        </ThemeProvider>
-      }
-    </div>
+    <BrowserRouter>
+      <Switch>
+        {/* This endpoint will just return you to a dummy HTML with a simple heading tag */}
+        <Route path="/health">
+          <h3>Hey There!!! The App is Healthy</h3>
+        </Route>
+
+        {/* All other routes will be defined here */}
+        <Route path="/">
+          <div>
+            <Health />
+            <ViewHeader viewType={viewType} setViewType={setViewType} />
+            {viewType == "desktop" ?
+              !loading ?
+                <Map
+                  eventData={data}
+                  center={{
+                    lat: 20.5937,
+                    lng: 78.9629
+                  }}
+                  zoom={5.5}
+                /> :
+                <div>LOADING</div> :
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Paper>
+                  <Navbar title="iHelp" />
+                  <Search />
+                  <SearchList />
+                </Paper>
+              </ThemeProvider>
+            }
+          </div>
+        </Route>
+        {/* Finally you will be redirected to a not found page */}
+
+      </Switch>
+    </BrowserRouter>
+
   );
 }
 
@@ -96,7 +114,7 @@ export default App;
 //                 inputProps={{ 'aria-label': 'search' }}
 //               />
 //             </div>  
-        
+
 //           <Header
 //             updateGPSUserLocation={updateGPSUserLocation}
 //             updateChosenUserCity={updateChosenUserCity}
