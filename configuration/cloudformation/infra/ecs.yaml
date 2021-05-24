@@ -1,0 +1,189 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description:  Deploy a service on AWS Fargate, hosted in a private subnet, but accessible via a public load balancer.
+
+Parameters:
+  AppName:
+    Type: String
+    Description: "Name of the application"
+
+  Environment:
+    Type: String
+    Description: "application environment"
+    Default: development
+
+  ContainerPort:
+    Type: String
+    Description: "Port at which node server is running"
+    Default: 8081
+
+  Path:
+    Type: String
+    Default: "*"
+    Description: A path on the public load balancer that this service
+                 should be connected to. Use * to send all load balancer
+                 traffic to this service.
+
+  Priority:
+    Type: Number
+    Default: 1
+    Description: The priority for the routing rule added to the load balancer.
+                 This only applies if your have multiple services which have been
+                 assigned to different paths on the load balancer
+
+  # 256 (.25 vCPU) - Available memory values: 0.5GB, 1GB, 2GB
+  # 512 (.5 vCPU) - Available memory values: 1GB, 2GB, 3GB, 4GB
+  # 1024 (1 vCPU) - Available memory values: 2GB, 3GB, 4GB, 5GB, 6GB, 7GB, 8GB
+  # 2048 (2 vCPU) - Available memory values: Between 4GB and 16GB in 1GB increments
+  # 4096 (4 vCPU) - Available memory values: Between 8GB and 30GB in 1GB increments
+  #CPU
+  # 0.5GB, 1GB, 2GB - Available cpu values: 256 (.25 vCPU)
+  # 1GB, 2GB, 3GB, 4GB - Available cpu values: 512 (.5 vCPU)
+  # 2GB, 3GB, 4GB, 5GB, 6GB, 7GB, 8GB - Available cpu values: 1024 (1 vCPU)
+  # Between 4GB and 16GB in 1GB increments - Available cpu values: 2048 (2 vCPU)
+  # Between 8GB and 30GB in 1GB increments - Available cpu values: 4096 (4 vCPU)
+
+#  Mappings:
+#   iHelpServerTaskDefinitionMap:
+#     Production:
+#       "Memory" : 1024
+#       "Cpu" : 512
+#       "ContainerName" : !Sub ${AppName}-${Environment}-api-server
+#       "ContainerImage" : !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${AppName}-${Environment}
+#       "ContainerPort" : 8080
+#       "HostPort" : 0
+#       "ContainerMemory" : 1024
+
+#   Development:
+#       "Memory" : 1024
+#       "Cpu" : 512
+#       "ContainerName" : !Sub ${AppName}-${Environment}-api-server
+#       "ContainerImage" : !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${AppName}-${Environment}
+#       "ContainerPort" : 8080
+#       "HostPort" : 0
+#       "ContainerMemory" : 1024
+
+Mappings:
+  TaskConfig:
+    MinTask:
+      Val: 1
+    MaxTask:
+      Val: 200
+    Cpu:
+      Val: 1024
+    Mem:
+      Val: 2048
+
+Resources:
+  #ECS fargate cluster
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub ${AppName}-${Environment}-cluster
+
+
+  # A target group. This is used for keeping track of all the tasks, and
+  # what IP addresses / port numbers they have. You can query it yourself,
+  # to use the addresses yourself, but most often this target group is just
+  # connected to an application load balancer, or network load balancer, so
+  # it can automatically distribute traffic across all the targets.
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 6
+      HealthCheckPath: /health
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      TargetType: ip
+      Name: !Sub ${AppName}-${Environment}-tr-grp
+      Port: !Ref ContainerPort
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId:
+        Fn::ImportValue:
+          !Sub 'ihelp-server-${Environment}-VPC'
+
+  #Task Definition: What docker image need to use for the task
+  ECSTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub ${AppName}-${Environment}-task-def
+      RequiresCompatibilities:
+        - FARGATE
+      Memory: !FindInMap ['TaskConfig', 'Mem', 'Val'] 
+      Cpu: !FindInMap ['TaskConfig', 'Cpu', 'Val']
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !ImportValue ECSTaskExecutionRole
+      ContainerDefinitions:
+        - Name: !Sub ${AppName}-${Environment}-container-def
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${AppName}-${Environment}
+          Environment:
+            - Name: NODE_PORT
+              Value: !Ref ContainerPort
+          Essential: true
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-group: !ImportValue LogGroup
+              awslogs-stream-prefix: ecs
+  
+  #ECS fargate service: Addition or Deletion for tasks.
+  ECSFargateService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Sub ${AppName}-${Environment}-fargate-service
+      Cluster: !Ref ECSCluster
+      DesiredCount: !FindInMap ['TaskConfig', 'MinTask', 'Val']
+      TaskDefinition: !Ref ECSTaskDefinition
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          #We have private subnet with NAT configured
+          SecurityGroups:
+            - Fn::ImportValue: 
+                !Sub ihelp-server-${Environment}-FargateContainerSecurityGroup
+          Subnets:
+            - Fn::ImportValue:
+                !Sub ihelp-server-${Environment}-PrivateSubnetOne
+            - Fn::ImportValue:
+                !Sub ihelp-server-${Environment}-PrivateSubnetTwo
+      LoadBalancers:
+        - ContainerName: !Sub ${AppName}-${Environment}-container-def
+          ContainerPort: !Ref ContainerPort
+          TargetGroupArn: !Ref TargetGroup
+
+  # Create a rule on the load balancer for routing traffic to the target group
+  LoadBalancerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - TargetGroupArn: !Ref 'TargetGroup'
+          Type: 'forward'
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - "/*"
+      ListenerArn:
+        Fn::ImportValue:
+          !Sub ihelp-server-${Environment}-PublicLoadBalancerListener
+      Priority: !Ref 'Priority'
+
+Outputs:
+  ECSFargateService:
+    Description: ECS fargate service
+    Value: !Ref ECSFargateService
+    Export:
+      Name: !Sub ${AppName}-${Environment}-ECSFargateService
+
+  ECSCluster:
+    Description: ECS cluster
+    Value: !Ref ECSCluster
+    Export:
+      Name: !Sub ${AppName}-${Environment}-ECSCluster
+  
