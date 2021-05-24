@@ -94,7 +94,7 @@ Resources:
       HealthCheckIntervalSeconds: 6
       HealthCheckPath: /health
       HealthCheckProtocol: HTTP
-      HealthCheckTimeoutSeconds: 5
+      HealthCheckTimeoutSeconds: 600
       HealthyThresholdCount: 2
       TargetType: ip
       Name: !Sub ${AppName}-${Environment}-tr-grp
