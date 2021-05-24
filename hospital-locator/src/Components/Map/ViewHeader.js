@@ -6,18 +6,18 @@ import toggleOn from '@iconify-icons/bi/toggle-on';
 
 const ViewHeader = ({ viewType, setViewType }) => {
     return (
-        <header 
+        <div
             className="header" 
-            onClick={() => setViewType(viewType == "desktop" ? "mobile" : "desktop")}
-            style={{ backgroundColor: viewType == "desktop" ? "red" : "#3f51b5" }}
+            onClick={() => setViewType(viewType === "desktop" ? "mobile" : "desktop")}
+            style={{ backgroundColor: viewType === "desktop" ? "red" : "#3f51b5" }}
         >
-                <h1>
-                    <Icon icon={viewType == "desktop" ? toggleOn : toggleOff } /> 
-                </h1>
-                <h1>
-                    Current View: <Icon icon={viewType == "desktop" ? desktopIcon : mobileIcon } /> 
-                </h1>
-        </header>
+                <h5>
+                    <Icon icon={viewType === "desktop" ? toggleOn : toggleOff } /> 
+                </h5>
+                <h5>
+                    Current View: <Icon icon={viewType === "desktop" ? desktopIcon : mobileIcon } /> 
+                </h5>
+        </div>
     )
 }
 

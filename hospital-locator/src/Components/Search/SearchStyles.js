@@ -38,6 +38,7 @@ export const useStyles = makeStyles((theme) => ({
       display: 'flex',
       justifyContent: 'center',
       flexWrap: 'wrap',
+      alignItems: 'center',
       '& > *': {
         margin: theme.spacing(0.5),
       },

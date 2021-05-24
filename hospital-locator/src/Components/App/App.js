@@ -21,17 +21,12 @@ import {Switch, Route } from 'react-router-dom';
 // Amplify.configure(awsconfig);
 
 function App() {
-
-  // const [theme, setTheme] = useState(false);
-
-  // const handleClick = () => {
-  //     setTheme(!theme);
-  //     console.log(theme);
-  // }
-
   const [eventData, setEventData] = useState([])
   const [loading, setLoading] = useState(false)
   const [viewType, setViewType] = useState("mobile")
+  const [location, setLocation] = useState("");
+  const [searchCity, setSearchCity] = useState("");
+  const [selectedResource, setSelectedResource] = useState("bed availability");
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -61,7 +56,7 @@ function App() {
               <Navbar title="iHelp" />
               <ViewHeader viewType={viewType} setViewType={setViewType} />
               {
-                viewType == "desktop" ?
+                viewType === "desktop" ?
                 !loading ?
                   <Map
                     eventData={data}
@@ -70,8 +65,15 @@ function App() {
                   /> :
                   <div>LOADING</div> :
                   <Paper>
-                    <Search />
-                    <SearchList />
+                  <Search 
+                    location={location} setLocation={setLocation} 
+                    searchCity={searchCity} setSearchCity={setSearchCity}
+                    selectedResource={selectedResource} setSelectedResource={setSelectedResource}
+                    />
+                  <SearchList 
+                    searchCity={searchCity ? searchCity : location ? location : null} 
+                    selectedResource={selectedResource}
+                    />
                   </Paper>
               }
               </ThemeProvider>
