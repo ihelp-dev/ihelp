@@ -31,7 +31,7 @@ function App() {
 
   const [eventData, setEventData] = useState([])
   const [loading, setLoading] = useState(false)
-  const [viewType, setViewType] = useState("desktop")
+  const [viewType, setViewType] = useState("mobile")
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -47,7 +47,6 @@ function App() {
   }, [])
 
   return (
-    
       <Switch>
         {/* This endpoint will just return you to a dummy HTML with a simple heading tag */}
         <Route path="/health"  status={200}>
@@ -57,33 +56,29 @@ function App() {
         {/* All other routes will be defined here */}
         <Route path="/">
           <div>
-            <ViewHeader viewType={viewType} setViewType={setViewType} />
-            {viewType == "desktop" ?
-              !loading ?
-                <Map
-                  eventData={data}
-                  center={{
-                    lat: 20.5937,
-                    lng: 78.9629
-                  }}
-                  zoom={5.5}
-                /> :
-                <div>LOADING</div> :
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Paper>
-                  <Navbar title="iHelp" />
-                  <Search />
-                  <SearchList />
-                </Paper>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Navbar title="iHelp" />
+              <ViewHeader viewType={viewType} setViewType={setViewType} />
+              {
+                viewType == "desktop" ?
+                !loading ?
+                  <Map
+                    eventData={data}
+                    center={{ lat: 20.5937,lng: 78.9629 }}
+                    zoom={7}
+                  /> :
+                  <div>LOADING</div> :
+                  <Paper>
+                    <Search />
+                    <SearchList />
+                  </Paper>
+              }
               </ThemeProvider>
-            }
           </div>
         </Route>
         {/* Finally you will be redirected to a not found page */}
-
       </Switch>
-
   );
 }
 
