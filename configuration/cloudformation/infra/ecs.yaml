@@ -91,7 +91,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckEnabled: true
-      HealthCheckIntervalSeconds: 300
+      HealthCheckIntervalSeconds: 180
       HealthCheckPath: /health
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 6
@@ -100,7 +100,7 @@ Resources:
       Name: !Sub ${AppName}-${Environment}-tr-grp
       Port: !Ref ContainerPort
       Protocol: HTTP
-      UnhealthyThresholdCount: 10
+      UnhealthyThresholdCount: 3
       VpcId:
         Fn::ImportValue:
           !Sub 'ihelp-server-${Environment}-VPC'
