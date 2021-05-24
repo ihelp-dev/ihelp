@@ -15,7 +15,7 @@ Parameters:
   GitHubRepoName:
     Type: String
     Description: GitHub Repo to pull from. Only the Name. not the URL
-    Default: "ihelp-server"
+    Default: "ihelp"
   GitHubBranch:
     Type: String
     Description: GitHub Branch
