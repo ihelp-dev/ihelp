@@ -26,7 +26,7 @@ Parameters:
   ContainerPort:
     Type: String
     Description: "Port at which node server is running"
-    Default: 3000
+    Default: 8081
 
 Metadata:
   AWS::CloudFormation::Interface:
