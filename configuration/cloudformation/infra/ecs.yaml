@@ -172,7 +172,7 @@ Resources:
       ListenerArn:
         Fn::ImportValue:
           !Sub ihelp-server-${Environment}-PublicLoadBalancerListener
-      Priority: !Ref 'Priority'
+      Priority: 2
 
 Outputs:
   ECSFargateService:
