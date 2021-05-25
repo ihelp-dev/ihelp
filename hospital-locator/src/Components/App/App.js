@@ -12,7 +12,7 @@ import { theme } from "../mui_theme";
 import Search from "../Search/Search";
 import SearchList from "../Search/SearchList";
 import Map from "../Map/Map";
-import ViewHeader from "../Map/ViewHeader";
+
 import data from "../../__mocks__/testData.json";
 import {Switch, Route } from 'react-router-dom';
 // import Amplify, { API, graphqlOperation } from "aws-amplify";
@@ -23,7 +23,7 @@ import {Switch, Route } from 'react-router-dom';
 function App() {
   const [eventData, setEventData] = useState([])
   const [loading, setLoading] = useState(false)
-  const [viewType, setViewType] = useState("mobile")
+  const [viewType, setViewType] = useState("ListView")
   const [location, setLocation] = useState("");
   const [searchCity, setSearchCity] = useState("");
   const [selectedResource, setSelectedResource] = useState("bed availability");
@@ -53,10 +53,10 @@ function App() {
           <div>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <Navbar title="iHelp" />
-              <ViewHeader viewType={viewType} setViewType={setViewType} />
+              <Navbar title="iHelp" viewType={viewType} setViewType={setViewType} />
+              
               {
-                viewType === "desktop" ?
+                viewType === "MapView" ?
                 !loading ?
                   <Map
                     eventData={data}
