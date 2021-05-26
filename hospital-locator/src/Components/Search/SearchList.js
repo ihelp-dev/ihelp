@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     root : {
         flexGrow : 1,
         marginTop : theme.spacing(2),
-        padding: theme.spacing(5),
+        paddingBottom: theme.spacing(5),
         width: "100%",
         [theme.breakpoints.up("sm")] : {
             width: "70%",
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchList(props) {
     const classes = useStyles();
     const {searchCity, selectedResource} = props;
-    const data = searchCity ? resourceList.filter( resource => resource.city === searchCity ) : "";
+    const data = searchCity && selectedResource ? resourceList.filter( resource => (resource.city === searchCity && resource.resourceName === selectedResource )) : "";
 
     return (
         <Grid container className={classes.root} justify="center">
