@@ -11,6 +11,7 @@ import vaccineIcon from '@iconify-icons/tabler/vaccine';
 import capsulesIcon from '@iconify-icons/fa-solid/capsules';
 import MuiAlert from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import citieslist from "../../__mocks__/cities.json";
 
 const resources = [
     { key: 0, label: 'bed availability', icon :hospitalBed },
@@ -18,15 +19,6 @@ const resources = [
     { key: 2, label: 'vaccine', icon: vaccineIcon },
     { key: 3, label: 'medicine', icon: capsulesIcon }
   ];
-
-const cities = [
-    "Hyderabad",
-     "Bengaluru",
-     "Delhi",
-     "Chennai",
-     "Mumbai",
-     "Pune"
- ]
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -40,10 +32,17 @@ export default function Search(props) {
     const [lng, setLng] = useState(null);
     const [status, setStatus] = useState(null);
     const [alert, setAlert] = useState(false);
+    const [cities, setCities] = useState([]);
 
     useEffect(() => {
+        loadCitiesList();
         getLocation();
     }, []);
+
+    const loadCitiesList = async () => {
+        const data = citieslist.map(city => city.name);
+        setCities(data);
+    }
 
     const getLocation = () => {
         if (!navigator.geolocation) {
@@ -79,7 +78,7 @@ export default function Search(props) {
     }
 
     return (
-        <>
+        <div>
             <Snackbar 
                 open={alert} 
                 anchorOrigin={{vertical:'bottom', horizontal:'center'}} 
@@ -102,7 +101,6 @@ export default function Search(props) {
                     {location ? location : "Location turned off, click to retry" }
                     </Typography>
                 </Grid>
-       
                 <Grid item xs={12}>
                     <Paper variant="elevation" square className={classes.paper} elevation={8}>
                         <div className={classes.chip}>
@@ -118,8 +116,8 @@ export default function Search(props) {
                                     }}
                                     id="controllable-states-demo"
                                     options={cities}
-                                    style={{ width: 300 }}
-                                    renderInput={(params) => <TextField className={classes.chip} {...params} placeholder={location? location : "Search City"} />}
+                                    style={{ width: "300px", justify:"center" }}
+                                    renderInput={(params) => <TextField className={classes.search} {...params} placeholder={location? location : "Search City"} />}
                                 />
                             </div>
                             <div className={classes.chip}>
@@ -138,6 +136,6 @@ export default function Search(props) {
                     </Paper>
                 </Grid>
             </Grid> 
-        </>    
+        </div>    
     )
 }
