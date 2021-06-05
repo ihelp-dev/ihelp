@@ -148,15 +148,14 @@ Resources:
       NetworkConfiguration:
         AwsvpcConfiguration:
           AssignPublicIp: DISABLED
-          #We have private subnet with NAT configured
           SecurityGroups:
             - Fn::ImportValue: 
                 !Sub ihelp-server-${Environment}-FargateContainerSecurityGroup
           Subnets:
             - Fn::ImportValue:
-                !Sub ihelp-server-${Environment}-PrivateSubnetOne
+                !Sub ihelp-server-${Environment}-PublicSubnetOne
             - Fn::ImportValue:
-                !Sub ihelp-server-${Environment}-PrivateSubnetTwo
+                !Sub ihelp-server-${Environment}-PublicSubnetTwo
       LoadBalancers:
         - ContainerName: !Sub ${AppName}-${Environment}-container-def
           ContainerPort: !Ref ContainerPort
