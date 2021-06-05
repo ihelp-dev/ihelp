@@ -28,10 +28,12 @@ export const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       minWidth: "100px",
       fontSize: "12px",
+      justifyContent: 'center',
+      alignItems: 'center',
       transition: theme.transitions.create('width'),
       width: '80%',
       [theme.breakpoints.up("sm")]: {
-        width : "48ch"
+        width : "40ch"
       }
     },
     chip : {

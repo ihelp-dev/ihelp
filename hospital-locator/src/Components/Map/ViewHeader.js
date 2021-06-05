@@ -28,7 +28,7 @@ const ViewHeader = ({ viewType, setViewType }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <Typography variant="h7" className={classes.title}>
+            <Typography variant="h6" className={classes.title}>
                 View &nbsp;
              </Typography>
            <ToggleButtonGroup

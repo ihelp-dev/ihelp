@@ -6,6 +6,9 @@ export const theme = createMuiTheme({
       // type: "dark",
       primary : indigo,
       secondary : red,
+      background: {
+        default: "azure"
+      }
     },
     overrides: {
       MuiAppBar: {

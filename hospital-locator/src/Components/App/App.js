@@ -54,7 +54,6 @@ function App() {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Navbar title="iHelp" viewType={viewType} setViewType={setViewType} />
-              
               {
                 viewType === "MapView" ?
                 !loading ?
@@ -64,17 +63,18 @@ function App() {
                     zoom={7}
                   /> :
                   <div>LOADING</div> :
-                  <Paper>
-                  <Search 
-                    location={location} setLocation={setLocation} 
-                    searchCity={searchCity} setSearchCity={setSearchCity}
-                    selectedResource={selectedResource} setSelectedResource={setSelectedResource}
-                    />
-                  <SearchList 
-                    searchCity={searchCity ? searchCity : location ? location : null} 
-                    selectedResource={selectedResource}
-                    />
-                  </Paper>
+                  <>
+                    <Search 
+                      location={location} setLocation={setLocation} 
+                      searchCity={searchCity} setSearchCity={setSearchCity}
+                      selectedResource={selectedResource} setSelectedResource={setSelectedResource}
+                      />
+                    <SearchList 
+                      searchCity={searchCity ? searchCity : location ? location : null} 
+                      selectedResource={selectedResource}
+                      eventData={eventData}
+                      />
+                  </>
               }
               </ThemeProvider>
           </div>
