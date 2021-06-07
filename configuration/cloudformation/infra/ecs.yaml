@@ -130,6 +130,8 @@ Resources:
               Value: !Ref ContainerPort
             - Name: REACT_APP_GOOGLE_API_KEY
               Value: AIzaSyC6i8pdSDPQ92sZbkZsdRPbUOvW9D8Kd_A
+            - Name: NODE_ENV
+              Value: !Sub ${Environment}
           Essential: true
           PortMappings:
             - ContainerPort: !Ref ContainerPort
@@ -166,6 +168,7 @@ Resources:
           TargetGroupArn: !Ref TargetGroup
 
   # Create a rule on the load balancer for routing traffic to the target group
+  # This rule makes the backend api available using public loadbalancer(useful for testing purpose)
   LoadBalancerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
@@ -180,6 +183,7 @@ Resources:
         Fn::ImportValue:
           !Sub ihelp-server-${Environment}-PublicLoadBalancerListener
       Priority: 2
+
 
 Outputs:
   ECSFargateService:
