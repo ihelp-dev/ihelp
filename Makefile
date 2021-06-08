@@ -53,6 +53,9 @@ update_pipeline: validate_templates
 			ParameterKey=GitHubToken,ParameterValue=$(GitHubToken) \
 		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
 
+login_ecs:
+	aws --region $(REGION) ecr get-login-password  | docker login --username AWS --password-stdin $(REPO_URI)
+	$(aws ecr get-login --no-include-email $(REGION))
 
 docker_local:
 	docker build . -t ${AppName}:local --build-arg NODE_IMAGE=${NODE_IMAGE} 
