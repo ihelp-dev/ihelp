@@ -61,7 +61,7 @@ login_ecs:
 
 docker_local:
 	docker build . -t ${AppName}:local --build-arg NODE_IMAGE=${NODE_IMAGE} 
-	docker run  -e "NODE_PORT=8080" -p 8080:8080 ${AppName}:local
+	docker run -it -p 3001:3000 ${AppName}:local
 
 setup_prod_infra: validate_templates  create_pipeline_prod 
 	echo "Infra created"
