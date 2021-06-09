@@ -13,6 +13,8 @@ REGION=us-west-2
 AppName=$(GitHubRepoName)
 Environment=production
 aws=aws --profile $(ACCOUNTNAME) --region $(REGION)
+REPO_URI=776006903638.dkr.ecr.$(REGION).amazonaws.com
+NODE_IMAGE=$(REPO_URI)/node
 IMAGE_URI=$(REPO_URI)/$(AppName)-$(Environment)
 
 

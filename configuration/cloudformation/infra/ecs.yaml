@@ -115,7 +115,7 @@ Resources:
             - Name: PORT
               Value: !Ref ContainerPort
             - Name: REACT_APP_GOOGLE_API_KEY
-              Value: AIzaSyC6i8pdSDPQ92sZbkZsdRPbUOvW9D8Kd_A
+              Value: AIzaSyCi-NeTHJ3F60Wd1oatZPuVOyRQo3BotxA
             - Name: NODE_ENV
               Value: !Sub ${Environment}
           Essential: true
