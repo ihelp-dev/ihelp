@@ -13,6 +13,8 @@ REGION=us-west-2
 AppName=$(GitHubRepoName)
 Environment=production
 aws=aws --profile $(ACCOUNTNAME) --region $(REGION)
+REPO_URI=776006903638.dkr.ecr.$(REGION).amazonaws.com
+NODE_IMAGE=$(REPO_URI)/node
 IMAGE_URI=$(REPO_URI)/$(AppName)-$(Environment)
 
 
@@ -53,10 +55,13 @@ update_pipeline: validate_templates
 			ParameterKey=GitHubToken,ParameterValue=$(GitHubToken) \
 		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
 
+login_ecs:
+	aws --region $(REGION) ecr get-login-password  | docker login --username AWS --password-stdin $(REPO_URI)
+	$(aws ecr get-login --no-include-email $(REGION))
 
 docker_local:
 	docker build . -t ${AppName}:local --build-arg NODE_IMAGE=${NODE_IMAGE} 
-	docker run  -e "NODE_PORT=8080" -p 8080:8080 ${AppName}:local
+	docker run -it -p 3001:3000 ${AppName}:local
 
 setup_prod_infra: validate_templates  create_pipeline_prod 
 	echo "Infra created"

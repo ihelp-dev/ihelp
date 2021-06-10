@@ -17,20 +17,6 @@ Parameters:
     Description: "Port at which node server is running"
     Default: 8081
 
-  Path:
-    Type: String
-    Default: "*"
-    Description: A path on the public load balancer that this service
-                 should be connected to. Use * to send all load balancer
-                 traffic to this service.
-
-  Priority:
-    Type: Number
-    Default: 1
-    Description: The priority for the routing rule added to the load balancer.
-                 This only applies if your have multiple services which have been
-                 assigned to different paths on the load balancer
-
   # 256 (.25 vCPU) - Available memory values: 0.5GB, 1GB, 2GB
   # 512 (.5 vCPU) - Available memory values: 1GB, 2GB, 3GB, 4GB
   # 1024 (1 vCPU) - Available memory values: 2GB, 3GB, 4GB, 5GB, 6GB, 7GB, 8GB
@@ -129,7 +115,9 @@ Resources:
             - Name: PORT
               Value: !Ref ContainerPort
             - Name: REACT_APP_GOOGLE_API_KEY
-              Value: AIzaSyC6i8pdSDPQ92sZbkZsdRPbUOvW9D8Kd_A
+              Value: AIzaSyCi-NeTHJ3F60Wd1oatZPuVOyRQo3BotxA
+            - Name: NODE_ENV
+              Value: !Sub ${Environment}
           Essential: true
           PortMappings:
             - ContainerPort: !Ref ContainerPort
@@ -166,6 +154,7 @@ Resources:
           TargetGroupArn: !Ref TargetGroup
 
   # Create a rule on the load balancer for routing traffic to the target group
+  # This rule makes the backend api available using public loadbalancer(useful for testing purpose)
   LoadBalancerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
@@ -180,6 +169,7 @@ Resources:
         Fn::ImportValue:
           !Sub ihelp-server-${Environment}-PublicLoadBalancerListener
       Priority: 2
+
 
 Outputs:
   ECSFargateService:
