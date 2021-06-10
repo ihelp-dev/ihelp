@@ -2,7 +2,8 @@
 import { Typography, Card, CardContent, CardHeader, CardActions, Grid, Paper, Button, Chip} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
-import { resourceList } from '../../__mocks__/mock_data';
+// import { resourceList } from '../../__mocks__/mock_data';
+// import { resourceList } from '../../__mocks__/live_data';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PhoneIcon from '@material-ui/icons/Phone';
 import { GiPathDistance } from 'react-icons/gi';
@@ -44,8 +45,16 @@ export default function SearchList(props) {
     const classes = useStyles();
     const {searchCity, selectedResource, eventData} = props;
     
+    // const data = searchCity && selectedResource ? 
+    //                 resourceList.filter( resource => (resource.city === searchCity && resource.resourceName === selectedResource )) : "";
+    
     const data = searchCity && selectedResource ? 
-                    resourceList.filter( resource => (resource.city === searchCity && resource.resourceName === selectedResource )) : "";
+        eventData.filter(resource => {
+            var landmark = resource.properties.landmark.split(",");
+            var extractedCity = landmark[landmark.length-1];
+            return searchCity == extractedCity
+        }) : 
+        "";
 
     return (
         <Grid container className={classes.root} justify="center">
@@ -66,10 +75,10 @@ export default function SearchList(props) {
                                     </Grid>
                                     <Grid item style={{ marginLeft: "10px", marginRight:"50px" }}>
                                         <Typography variant="body1" style={{fontSize:"14px"}}>
-                                            {dataItem.hospitalName}
+                                            {dataItem.properties.name_english}
                                         </Typography>
                                         <Typography variant="body2" style={{fontSize:"12px"}}>
-                                            {dataItem.address}
+                                            {dataItem.properties.landmark}
                                         </Typography>
                                     </Grid>  
                                     <Grid item>

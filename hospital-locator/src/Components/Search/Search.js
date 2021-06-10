@@ -11,7 +11,8 @@ import vaccineIcon from '@iconify-icons/tabler/vaccine';
 import capsulesIcon from '@iconify-icons/fa-solid/capsules';
 import MuiAlert from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import citieslist from "../../__mocks__/cities.json";
+// import citieslist from "../../__mocks__/cities.json";
+// import { resourceList } from '../../__mocks__/live_data';
 
 const resources = [
     { key: 0, label: 'bed availability', icon :hospitalBed },
@@ -26,7 +27,7 @@ function Alert(props) {
 
 export default function Search(props) {
     const classes = useStyles();
-    const {location, setLocation, searchCity, setSearchCity, selectedResource, setSelectedResource} = props;
+    const {location, setLocation, searchCity, setSearchCity, selectedResource, setSelectedResource, eventData} = props;
     const [geoLocationOn, setGeoLocationOn] = useState(false);
     const [lat, setLat] = useState(null);
     const [lng, setLng] = useState(null);
@@ -37,11 +38,24 @@ export default function Search(props) {
     useEffect(() => {
         loadCitiesList();
         getLocation();
-    }, []);
+    }, [eventData]);
 
+    // assume each resource contains a "landmark" key that has the city name after the last comma
+    // e.g. "Om Satya Complex, Near Bichpuri Railway Fatak, Bichpuri, Agra"
     const loadCitiesList = async () => {
-        const data = citieslist.map(city => city.name);
-        setCities(data);
+        // const data = citieslist.map(city => city.name);
+        const data = new Set(eventData.map(resource => {
+            var landmark = resource.properties.landmark.split(",")
+            return landmark[landmark.length-1]
+        }))
+        
+        // const data = citieslist.map(city => city.name)
+        // data.sort((a, b) => { 
+        //     console.log(a);
+        //     return a.localeCompare(b)
+        // })
+        
+        setCities(Array.from(data));
     }
 
     const getLocation = () => {
