@@ -29,7 +29,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [viewType, setViewType] = useState("ListView")
   const [location, setLocation] = useState("");
-  const [searchCity, setSearchCity] = useState("");
+  const [searchCity, setSearchCity] = useState(location ? location : "");
   const [selectedResource, setSelectedResource] = useState("bed availability");
 
   useEffect(() => {

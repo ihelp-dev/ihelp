@@ -83,7 +83,7 @@ export default function SearchList(props) {
                                     </Grid>  
                                     <Grid item>
                                     <Chip 
-                                        size="large"
+                                        size="medium"
                                         icon={<GiPathDistance style={{color:"yellow"}}/>}
                                         label="10 miles"
                                         clickable

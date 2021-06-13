@@ -11,14 +11,15 @@ import vaccineIcon from '@iconify-icons/tabler/vaccine';
 import capsulesIcon from '@iconify-icons/fa-solid/capsules';
 import MuiAlert from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { GiConsoleController } from 'react-icons/gi';
 // import citieslist from "../../__mocks__/cities.json";
 // import { resourceList } from '../../__mocks__/live_data';
 
 const resources = [
-    { key: 0, label: 'bed availability', icon :hospitalBed },
-    { key: 1, label: 'oxygen', icon: gasCylinder },
-    { key: 2, label: 'vaccine', icon: vaccineIcon },
-    { key: 3, label: 'medicine', icon: capsulesIcon }
+    { key: 0, label: 'bed availability', icon :hospitalBed, value:"Hospital" },
+    { key: 1, label: 'oxygen', icon: gasCylinder, value:"Oxygen" },
+    { key: 2, label: 'vaccine', icon: vaccineIcon, value:"Vaccine" },
+    { key: 3, label: 'medicine', icon: capsulesIcon, value:"Medicine" }
   ];
 
 function Alert(props) {
@@ -34,6 +35,7 @@ export default function Search(props) {
     const [status, setStatus] = useState(null);
     const [alert, setAlert] = useState(false);
     const [cities, setCities] = useState([]);
+    const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
         loadCitiesList();
@@ -48,12 +50,11 @@ export default function Search(props) {
             var landmark = resource.properties.landmark.split(",")
             return landmark[landmark.length-1]
         }))
-        
-        // const data = citieslist.map(city => city.name)
-        // data.sort((a, b) => { 
-        //     console.log(a);
-        //     return a.localeCompare(b)
-        // })
+        // // const data = citieslist.map(city => city.name)
+        // // data.sort((a, b) => { 
+        // //     console.log(a);
+        // //     return a.localeCompare(b)
+        // // })
         
         setCities(Array.from(data));
     }
@@ -120,18 +121,18 @@ export default function Search(props) {
                         <div className={classes.chip}>
                                 <LocationCityIcon color="primary" variant="filled" fontSize="small"/> 
                                 <Autocomplete
-                                    value={searchCity||null}
+                                    value={searchCity}
                                     onChange={(event, newValue) => {
-                                        if(newValue != null) setSearchCity(newValue);
+                                    setSearchCity(newValue);
                                     }}
-                                    inputValue={searchCity}
+                                    inputValue={inputValue}
                                     onInputChange={(event, newInputValue) => {
-                                        if(newInputValue !=null ) setSearchCity(newInputValue)
+                                    setInputValue(newInputValue);
                                     }}
                                     id="controllable-states-demo"
                                     options={cities}
-                                    style={{ width: "300px", justify:"center" }}
-                                    renderInput={(params) => <TextField className={classes.search} {...params} placeholder={location? location : "Search City"} />}
+                                    style={{ width: 300 }}
+                                    renderInput={(params) => <TextField {...params} label="Search City" />}
                                 />
                             </div>
                             <div className={classes.chip}>
