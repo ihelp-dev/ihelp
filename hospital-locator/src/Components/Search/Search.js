@@ -16,11 +16,11 @@ import { GiConsoleController } from 'react-icons/gi';
 // import { resourceList } from '../../__mocks__/live_data';
 
 const resources = [
-    { key: 0, label: 'bed availability', icon :hospitalBed, value:"Hospital" },
-    { key: 1, label: 'oxygen', icon: gasCylinder, value:"Oxygen" },
-    { key: 2, label: 'vaccine', icon: vaccineIcon, value:"Vaccine" },
-    { key: 3, label: 'medicine', icon: capsulesIcon, value:"Medicine" }
-  ];
+    { key: 0, label: 'bed availability', icon: hospitalBed, value: "Hospital" },
+    { key: 1, label: 'oxygen', icon: gasCylinder, value: "Oxygen" },
+    { key: 2, label: 'vaccine', icon: vaccineIcon, value: "Vaccine" },
+    { key: 3, label: 'medicine', icon: capsulesIcon, value: "Medicine" }
+];
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -28,7 +28,7 @@ function Alert(props) {
 
 export default function Search(props) {
     const classes = useStyles();
-    const {location, setLocation, searchCity, setSearchCity, selectedResource, setSelectedResource, eventData} = props;
+    const { location, setLocation, searchCity, setSearchCity, selectedResource, setSelectedResource, eventData } = props;
     const [geoLocationOn, setGeoLocationOn] = useState(false);
     const [lat, setLat] = useState(null);
     const [lng, setLng] = useState(null);
@@ -48,14 +48,14 @@ export default function Search(props) {
         // const data = citieslist.map(city => city.name);
         const data = new Set(eventData.map(resource => {
             var landmark = resource.properties.landmark.split(",")
-            return landmark[landmark.length-1]
+            return landmark[landmark.length - 1]
         }))
         // // const data = citieslist.map(city => city.name)
         // // data.sort((a, b) => { 
         // //     console.log(a);
         // //     return a.localeCompare(b)
         // // })
-        
+
         setCities(Array.from(data));
     }
 
@@ -66,91 +66,91 @@ export default function Search(props) {
         } else {
             setStatus('Locating...');
             navigator.geolocation.getCurrentPosition((position) => {
-            setStatus(null);
-            setLat(position.coords.latitude);
-            setLng(position.coords.longitude);
-            setGeoLocationOn(true);
-            getAddress(position.coords.latitude,position.coords.longitude);
+                setStatus(null);
+                setLat(position.coords.latitude);
+                setLng(position.coords.longitude);
+                setGeoLocationOn(true);
+                getAddress(position.coords.latitude, position.coords.longitude);
             }, () => {
-            setStatus('Unable to retrieve your location. Check if Location Access Permission is ON');
-            setAlert(true);
+                setStatus('Unable to retrieve your location. Check if Location Access Permission is ON');
+                setAlert(true);
             });
         }
     }
 
     const getAddress = (latitude, longitude) => {
         fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-        .then(res => res.json())
-        .then(data => setLocation(data.results[0].address_components[0].long_name))
-        .catch(err => console.error(err))
+            .then(res => res.json())
+            .then(data => setLocation(data.results[0].address_components[0].long_name))
+            .catch(err => console.error(err))
     };
 
     const toggleOffGeoLocation = () => {
         setGeoLocationOn(false);
         setLat(null);
         setLng(null);
-        setLocation(""); 
+        setLocation("");
     }
 
     return (
         <div>
-            <Snackbar 
-                open={alert} 
-                anchorOrigin={{vertical:'bottom', horizontal:'center'}} 
-                autoHideDuration={8000} 
+            <Snackbar
+                open={alert}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                autoHideDuration={8000}
                 onClose={() => setAlert(false)}
-                >
+            >
                 <Alert onClose={() => setAlert(false)} severity="warning">
                     {status}
                 </Alert>
             </Snackbar>
             <Grid container alignItems="center" className={classes.root}>
                 <Grid item>
-                { geoLocationOn ? 
-                    <LocationOnIcon onClick={toggleOffGeoLocation} fontSize="small" color="secondary" className={classes.location} />  : 
-                    <LocationOffIcon onClick={getLocation} fontSize="small" color="secondary" className={classes.location} />    
-                }
+                    {geoLocationOn ?
+                        <LocationOnIcon onClick={toggleOffGeoLocation} fontSize="small" color="secondary" className={classes.location} /> :
+                        <LocationOffIcon onClick={getLocation} fontSize="small" color="secondary" className={classes.location} />
+                    }
                 </Grid>
                 <Grid item>
-                    <Typography className={classes.locationText}>
-                    {location ? location : "Location turned off, click to retry" }
+                    <Typography className={classes.locationText} onClick={location ? toggleOffGeoLocation : getLocation} >
+                        {location ? location : "Location turned off, click to retry"}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Paper variant="elevation" square className={classes.paper} elevation={8}>
                         <div className={classes.chip}>
-                                <LocationCityIcon color="primary" variant="filled" fontSize="small"/> 
-                                <Autocomplete
-                                    value={searchCity}
-                                    onChange={(event, newValue) => {
+                            <LocationCityIcon color="primary" variant="filled" fontSize="small" />
+                            <Autocomplete
+                                value={searchCity}
+                                onChange={(event, newValue) => {
                                     setSearchCity(newValue);
-                                    }}
-                                    inputValue={inputValue}
-                                    onInputChange={(event, newInputValue) => {
+                                }}
+                                inputValue={inputValue}
+                                onInputChange={(event, newInputValue) => {
                                     setInputValue(newInputValue);
-                                    }}
-                                    id="controllable-states-demo"
-                                    options={cities}
-                                    style={{ width: 300 }}
-                                    renderInput={(params) => <TextField {...params} label="Search City" />}
+                                }}
+                                id="controllable-states-demo"
+                                options={cities}
+                                style={{ width: 300 }}
+                                renderInput={(params) => <TextField {...params} label="Search City" />}
+                            />
+                        </div>
+                        <div className={classes.chip}>
+                            {resources.map((resource) => {
+                                return <Chip key={resource.key}
+                                    size="small"
+                                    icon={<InlineIcon icon={resource.icon} />}
+                                    label={resource.label}
+                                    clickable
+                                    onClick={() => setSelectedResource(resource.label)}
+                                    color={selectedResource === resource.label ? "primary" : "default"}
                                 />
-                            </div>
-                            <div className={classes.chip}>
-                                {resources.map( (resource) => {
-                                        return <Chip key={resource.key}
-                                            size="small"
-                                            icon={<InlineIcon icon={resource.icon} />}
-                                            label={resource.label}
-                                            clickable
-                                            onClick= { () => setSelectedResource(resource.label)}
-                                            color={selectedResource===resource.label ? "primary" : "default"}
-                                        />
-                                    }
-                                )}
-                            </div>
+                            }
+                            )}
+                        </div>
                     </Paper>
                 </Grid>
-            </Grid> 
-        </div>    
+            </Grid>
+        </div>
     )
 }
