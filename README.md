@@ -2,9 +2,14 @@
 A web application to help people locate COVID related help as fast as possible.
 
 ## Table of Contents  
+* [Screenshots](#screenshots)
 * [Current Tech Stack](#current-tech-stack)
 * [File Structure](#file-structure)
 * [Contributing to the Project](#contributing-to-the-project)
+
+## Screenshots
+![Hospital List View](images/list-view.PNG?raw=true "Hospital List View")
+![Interactive GPS View](images/gps-view.PNG?raw=true "Interactive GPS View")
 
 ## Current Tech Stack
 * Frontend: React
